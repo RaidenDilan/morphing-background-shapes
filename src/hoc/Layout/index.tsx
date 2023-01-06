@@ -8,7 +8,7 @@ import { LayoutProps } from './Layout';
 
 const Layout = ({ children }: LayoutProps) => (
   <div className="Layout">
-    <Header />
+    {/* <Header /> */}
     <div className="Layout__body">{children}</div>
     <Footer />
   </div>

@@ -1,6 +1,58 @@
+@font-face {
+  font-family: 'nexa_boldregular';
+  font-weight: bold;
+  font-style: normal;
+  src: url('./assets/fonts/nexa_boldfree_macroman/Nexa_Free_Bold-webfont.eot');
+  src: url('./assets/fonts/nexa_boldfree_macroman/Nexa_Free_Bold-webfont.eot?#iefix') format('embedded-opentype'),
+       url('./assets/fonts/nexa_boldfree_macroman/Nexa_Free_Bold-webfont.woff2') format('woff2'),
+       url('./assets/fonts/nexa_boldfree_macroman/Nexa_Free_Bold-webfont.woff') format('woff'),
+       url('./assets/fonts/nexa_boldfree_macroman/Nexa_Free_Bold-webfont.ttf') format('truetype'),
+       url('./assets/fonts/nexa_boldfree_macroman/Nexa_Free_Bold-webfont.svg#nexa_boldregular') format('svg');
+}
+
+*,
+*::after,
+*::before {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 body {
+  --text-color: #fff;
+  --background-color: #363dc2;
+  --background-color-2: #282faf;
+  --background-color-3: #202692;
+  --link-color: #03b9f1;
+  --link-hover-color: #fff;
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 500;
+  color: #fff;
+  color: var(--text-color);
+  background-color: #363dc2;
+  background-color: var(--background-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
   margin: 0;
   padding: 0;
+}
+
+main {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: var(--link-color);
+  outline: none;
+}
+
+a:hover,
+a:focus {
+  color: var(--link-hover-color);
+  outline: none;
 }
 
 .modal-enter {
