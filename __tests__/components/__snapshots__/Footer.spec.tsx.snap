@@ -1,24 +1,48 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`/Users/Raiden/development/.boilerplates/vite-boilerplate/__tests__/components/Footer.spec.tsx should render without crashing 1`] = `
+exports[`/Users/Raiden/development/ANIMATIONS/morphing-background-shapes/__tests__/components/Footer.spec.tsx should render without crashing 1`] = `
 <DocumentFragment>
   <div
     class="Footer"
     data-testid="footer"
   >
-    <div
-      class="container"
+    <section
+      class="content content--related"
     >
-      <div
-        class="logo-container"
+      <p
+        class="content__info"
+      >
+        If you enjoyed this demo you might also like:
+      </p>
+      <a
+        class="content__related-item"
+        href="https://tympanus.net/Development/ElasticSVGElements/"
       >
         <img
-          alt="Brand Logo"
-          data-testid="brand-logo-img"
-          src="[object Object]"
+          class="content__related-img"
+          src="test-file-stub"
         />
-      </div>
-    </div>
+        <h3
+          class="content__related-title"
+        >
+          Elastic SVG Elements
+        </h3>
+      </a>
+      <a
+        class="content__related-item"
+        href="https://tympanus.net/Development/ItemRevealer/"
+      >
+        <img
+          class="content__related-img"
+          src="test-file-stub"
+        />
+        <h3
+          class="content__related-title"
+        >
+          Item Revealer
+        </h3>
+      </a>
+    </section>
   </div>
 </DocumentFragment>
 `;

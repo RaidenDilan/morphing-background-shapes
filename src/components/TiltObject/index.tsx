@@ -1,4 +1,4 @@
-import React, { createRef, PureComponent } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import anime from 'animejs';
 
 interface MovementProps {
@@ -9,8 +9,8 @@ interface MovementProps {
 }
 
 interface TiltObjectProps {
-  // el: Element;
   content: {
+    index: number;
     imageSrc: string;
     title: string;
     content__author: string;
@@ -19,18 +19,8 @@ interface TiltObjectProps {
   options?: MovementProps;
 }
 
-interface StyleProps {
-  style: {
-    WebkitTransform: string;
-  };
-}
-
 interface TiltObjectState {
   options: MovementProps;
-  dom: {
-    img: StyleProps | Element | null;
-    title: StyleProps | Element | null;
-  };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
@@ -62,17 +52,14 @@ const getMousePos = (e: MouseEvent) => {
   return { x: posx, y: posy };
 };
 
-export class TiltObject extends PureComponent<
-  TiltObjectProps,
-  TiltObjectState
-> {
-  public static defaultProps = {
+const TiltObject = (props: TiltObjectProps) => {
+  const [state, setState] = useState<TiltObjectState>({
     options: {
       movement: {
         img: {
           translation: {
             x: -10,
-            y: -10,
+            y: -20,
           },
         },
         title: {
@@ -83,69 +70,43 @@ export class TiltObject extends PureComponent<
         },
       },
     },
-    dom: {
-      img: null,
-      title: null,
-    },
-  };
+  });
 
-  private elemRef: React.RefObject<HTMLDivElement>;
+  const elemRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
 
-  constructor(props: TiltObjectProps) {
-    super(props);
-    this.state = {
-      options: {
-        movement: {
-          img: { translation: { x: -40, y: -40 } },
-          title: { translation: { x: 20, y: 20 } },
-        },
-      },
-      dom: {
-        img: null,
-        title: null,
-      },
+  useEffect(() => {
+    setState(prev => ({
+      ...prev,
+      options: extend({}, state.options) as MovementProps,
+    }));
+    extend(state.options, props.options as MovementProps);
+
+    elemRef.current?.addEventListener('mousemove', mouseMoveFn);
+    elemRef.current?.addEventListener('mouseleave', mouseLeaveFn);
+    elemRef.current?.addEventListener('mouseenter', mouseEnterFn);
+
+    return () => {
+      elemRef.current?.removeEventListener('mousemove', mouseMoveFn);
+      elemRef.current?.removeEventListener('mouseleave', mouseLeaveFn);
+      elemRef.current?.removeEventListener('mouseenter', mouseEnterFn);
     };
+  }, []);
 
-    this.elemRef = createRef();
-    this.layout = this.layout.bind(this);
-  }
-
-  componentDidMount() {
-    this.setState({ options: extend({}, this.state.options) as MovementProps });
-    extend(this.state.options, this.props.options as MovementProps);
-    this.setState({
-      dom: {
-        // img: this.props.el.querySelector('.content__img'),
-        // title: this.props.el.querySelector('.content__title'),
-        img: document.querySelector('.content__img'),
-        title: document.querySelector('.content__title'),
-      },
-    });
-
-    addEventListener('mousemove', this.mousemoveFn);
-    addEventListener('mouseleave', this.mouseleaveFn);
-    addEventListener('mouseenter', this.mouseenterFn);
-  }
-
-  componentWillUnmount() {
-    removeEventListener('mousemove', this.mousemoveFn);
-    removeEventListener('mouseleave', this.mouseleaveFn);
-    removeEventListener('mouseenter', this.mouseenterFn);
-  }
-
-  mouseenterFn = (e: MouseEvent) => {
-    anime.remove(this.state.dom.img);
-    anime.remove(this.state.dom.title);
+  const mouseEnterFn = (e: MouseEvent) => {
+    anime.remove(imgRef);
+    anime.remove(titleRef);
   };
 
-  mousemoveFn = (e: MouseEvent) => {
-    requestAnimationFrame(() => this.layout(e));
+  const mouseMoveFn = (e: MouseEvent) => {
+    requestAnimationFrame(() => layout(e));
   };
 
-  mouseleaveFn = (e: MouseEvent) => {
+  const mouseLeaveFn = (e: MouseEvent) => {
     requestAnimationFrame(() => {
       anime({
-        targets: [this.state.dom.img, this.state.dom.title],
+        targets: [imgRef, titleRef],
         duration: 1500,
         easing: 'easeOutElastic',
         elasticity: 400,
@@ -155,7 +116,7 @@ export class TiltObject extends PureComponent<
     });
   };
 
-  layout = (e: MouseEvent) => {
+  const layout = (e: MouseEvent) => {
     // Mouse position relative to the document.
     const mousepos = getMousePos(e);
     // Document scrolls.
@@ -164,10 +125,8 @@ export class TiltObject extends PureComponent<
       top: document.body.scrollTop + document.documentElement.scrollTop,
     };
 
-    // const bounds = this.props.el.getBoundingClientRect();
-    const bounds = this.elemRef.current?.getBoundingClientRect() as DOMRect;
-
-    // Mouse position relative to the main element (this.DOM.el).
+    const bounds = elemRef.current?.getBoundingClientRect() as DOMRect;
+    // Mouse position relative to the main element (DOM.el).
     const relmousepos = {
       x: mousepos.x - bounds.left - docScrolls.left,
       y: mousepos.y - bounds.top - docScrolls.top,
@@ -175,8 +134,8 @@ export class TiltObject extends PureComponent<
 
     // Movement settings for the animatable elements.
     const t = {
-      img: this.state.options.movement.img.translation,
-      title: this.state.options.movement.title.translation,
+      img: state.options.movement.img.translation,
+      title: state.options.movement.title.translation,
     };
 
     const transforms = {
@@ -194,55 +153,47 @@ export class TiltObject extends PureComponent<
       },
     };
 
-    this.setState(prevState => ({
-      ...prevState,
-      dom: {
-        title: {
-          style: {
-            WebkitTransform:
-              'translateX(' +
-              transforms.title.x +
-              'px) translateY(' +
-              transforms.title.y +
-              'px)',
-          },
-        },
-        img: {
-          style: {
-            WebkitTransform:
-              'translateX(' +
-              transforms.img.x +
-              'px) translateY(' +
-              transforms.img.y +
-              'px)',
-          },
-        },
-      },
-    }));
+    if (titleRef.current) {
+      titleRef.current.style.transform =
+        'translateX(' +
+        transforms.title.x +
+        'px) translateY(' +
+        transforms.title.y +
+        'px)';
+    }
+    if (imgRef.current) {
+      imgRef.current.style.transform =
+        'translateX(' +
+        transforms.img.x +
+        'px) translateY(' +
+        transforms.img.y +
+        'px)';
+    }
   };
 
-  render() {
-    return (
-      <div className="content-wrap">
-        <div
-          className="content content--layout content--layout-3"
-          ref={this.elemRef}
-        >
-          <img
-            className="content__img"
-            src={this.props.content.imageSrc}
-            alt="Some image"
-          />
-          <h3 className="content__title">{this.props.content.title}</h3>
-          <p className="content__author">
-            {this.props.content.content__author}
-          </p>
-          <p className="content__desc">{this.props.content.content__desc}</p>
-          <a href="#" className="content__link">
-            Discover
-          </a>
-        </div>
+  return (
+    <div className="content-wrap">
+      <div
+        ref={elemRef}
+        className={`content content--layout content--layout-${props.content.index}`}
+      >
+        <img
+          ref={imgRef}
+          className="content__img"
+          src={props.content.imageSrc}
+          alt="Some image"
+        />
+        <h3 ref={titleRef} className="content__title">
+          {props.content.title}
+        </h3>
+        <p className="content__author">{props.content.content__author}</p>
+        <p className="content__desc">{props.content.content__desc}</p>
+        <a href="#" className="content__link">
+          Discover
+        </a>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
+
+export default TiltObject;

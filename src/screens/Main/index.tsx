@@ -4,7 +4,7 @@ import './Main.scss';
 import anime from 'animejs';
 import imagesLoaded from 'imagesloaded';
 import scrollMonitor from 'scrollmonitor';
-import { TiltObject } from '../../components/TiltObject';
+import TiltObject from '../../components/TiltObject';
 
 import img1 from './img/1.jpg';
 import img4 from './img/4.jpg';
@@ -208,7 +208,7 @@ const contentArray: ContentsArray[] = [
     imageSrc: img3,
     title: 'found',
     content__author: 'Jane Westhall',
-    content__desc: 'Lost or found? That is the question today.',
+    content__desc: "Lost or found? That's the question today.",
   },
   {
     imageSrc: img4,
@@ -232,7 +232,7 @@ const contentArray: ContentsArray[] = [
     imageSrc: img5,
     title: 'frank',
     content__author: 'Frank Cherry',
-    content__desc: 'Frank is work and nothing more.',
+    content__desc: "Frank's work and nothing more.",
   },
 ];
 
@@ -378,7 +378,7 @@ const Main = () => {
   };
 
   return (
-    <div className="Main">
+    <main className="Main">
       <svg className="hidden">
         <symbol id="icon-arrow" viewBox="0 0 24 24">
           <title>arrow</title>
@@ -468,75 +468,12 @@ const Main = () => {
             lines of code.
           </p>
         </a>
+        <div className="deco deco--title">2017 Westland Exhibition Center</div>
       </div>
       {Array.from(contentArray).map((el, i) => (
-        <TiltObject key={i} content={el} />
+        <TiltObject key={i} content={{ ...el, index: i }} />
       ))}
-
-      {/* <div className="content-wrap">
-        <div className="content content--layout content--layout-1">
-          <img className="content__img" src={img3} alt="Some image" />
-          <h3 className="content__title">found</h3>
-          <p className="content__author">Jane Westhall</p>
-          <p className="content__desc">
-            Lost or found? Thats the question today.
-          </p>
-          <a href="#" className="content__link">
-            Discover
-          </a>
-        </div>
-      </div>
-      <div className="content-wrap">
-        <div className="content content--layout content--layout-2">
-          <img className="content__img" src={img4} alt="Some image" />
-          <h3 className="content__title">bunch</h3>
-          <p className="content__author">Nikimo Westlane</p>
-          <p className="content__desc">
-            The neverending quest, once and forever.
-          </p>
-          <a href="#" className="content__link">
-            Discover
-          </a>
-        </div>
-      </div>
-      <div className="content-wrap">
-        <div className="content content--layout content--layout-3">
-          <img className="content__img" src={img1} alt="Some image" />
-          <h3 className="content__title">revert</h3>
-          <p className="content__author">Gregory Mourisha</p>
-          <p className="content__desc">
-            Finding the heart when paradise is lost.
-          </p>
-          <a href="#" className="content__link">
-            Discover
-          </a>
-        </div>
-      </div>
-      <div className="content-wrap">
-        <div className="content content--layout content--layout-4">
-          <img className="content__img" src={img2} alt="Some image" />
-          <h3 className="content__title">east</h3>
-          <p className="content__author">Walter Mastricht</p>
-          <p className="content__desc">
-            The outer bounds of the world, from within.
-          </p>
-          <a href="#" className="content__link">
-            Discover
-          </a>
-        </div>
-      </div>
-      <div className="content-wrap">
-        <div className="content content--layout content--layout-1">
-          <img className="content__img" src={img5} alt="Some image" />
-          <h3 className="content__title">frank</h3>
-          <p className="content__author">Frank Cherry</p>
-          <p className="content__desc">Franks work and nothing more.</p>
-          <a href="#" className="content__link">
-            Discover
-          </a>
-        </div>
-      </div> */}
-    </div>
+    </main>
   );
 };
 

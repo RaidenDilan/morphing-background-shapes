@@ -2,17 +2,5 @@
 @import '../../theme/mixins.module.scss';
 
 .Footer {
-  z-index: 10;
-  border-top: 1px solid $White;
-
-  .container {
-    @include flex(center, center, false);
-    padding: 1em 2.5em;
-  }
-
-  .logo-container {
-    & > img {
-      height: 1.5em;
-    }
-  }
+  
 }
