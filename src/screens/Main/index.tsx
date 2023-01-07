@@ -237,36 +237,13 @@ const contentArray: ContentsArray[] = [
 ];
 
 const Main = () => {
-  // const contentElemsRef = useRef<HTMLDivElement>(null);
-  // const contentElemsChildNodes = contentElemsRef.current?.childNodes;
-
   let step: number;
-
   let svg: HTMLDivElement | null;
   let shapeEl: SVGPathElement | null;
   let contentElems: Element[];
   let contentLinks: Element[];
   let footer: HTMLDivElement | null;
   let contentElemsTotal: number;
-
-  const init = () => {
-    svg = document.querySelector('.morph');
-    shapeEl = svg ? svg.querySelector('path') : null;
-    contentElems = Array.from(document.querySelectorAll('.content-wrap'));
-    contentLinks = Array.from(document.querySelectorAll('.content__link'));
-    footer = document.querySelector('.content--related');
-    contentElemsTotal = contentElems.length;
-
-    imagesLoaded(document.body, instance => {
-      initShapeEl();
-      createScrollWatchers();
-      document.body.classList.remove('loading');
-    });
-  };
-
-  useEffect(() => {
-    init();
-  }, []);
 
   const initShapeLoop = (pos = 0) => {
     anime.remove(shapeEl);
@@ -376,6 +353,25 @@ const Main = () => {
       }, false);
     });
   };
+
+  const init = () => {
+    svg = document.querySelector('.morph');
+    shapeEl = svg ? svg.querySelector('path') : null;
+    contentElems = Array.from(document.querySelectorAll('.content-wrap'));
+    contentLinks = Array.from(document.querySelectorAll('.content__link'));
+    footer = document.querySelector('.content--related');
+    contentElemsTotal = contentElems.length;
+
+    imagesLoaded(document.body, instance => {
+      initShapeEl();
+      createScrollWatchers();
+      document.body.classList.remove('loading');
+    });
+  };
+
+  useEffect(() => {
+    init();
+  }, []);
 
   return (
     <main className="Main">
