@@ -1,0 +1,25 @@
+.morph-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.morph {
+  position: relative;
+  height: 100%;
+  fill: var(--background-color-2);
+  flex: none;
+}
+
+.demo-3 .morph {
+  fill: none;
+  stroke-width: 12px;
+  stroke: #22bcc0;
+}
